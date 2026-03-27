@@ -49,7 +49,23 @@ def create_matrix(events: pd.DataFrame):
 
     return matrix
 
+def train_test_split_temporal(events: pd.DataFrame,test_days: int = 7):
+    # Split czasowy — ostatnie N dni idą do testu
+    # NIGDY nie rób random splitu w rec sys
+    cutoff = events["timestamp"].max() - pd.Timedelta(days=test_days)
+    train = events[events["timestamp"] <= cutoff]
+    test  = events[events["timestamp"] >  cutoff]
 
+    # Zostaw w teście tylko userów i produkty znane z treningu
+    train_users = set(train["user_id"])
+    train_items = set(train["product_id"])
+
+    test = test[
+        test["user_id"].isin(train_users) &
+        test["product_id"].isin(train_items)
+    ]
+
+    return train.reset_index(drop=True), test.reset_index(drop=True)
 
 
 
@@ -63,5 +79,5 @@ if __name__ == "__main__":
     print(after_filter['event'].value_counts())
     print('---Wielkość macierzy')
     print(create_matrix(after_filter).shape)
-    
+
 
