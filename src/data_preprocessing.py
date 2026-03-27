@@ -47,7 +47,7 @@ def create_matrix(events: pd.DataFrame):
     UI = csr_matrix((data, (rows, cols)), shape=(len(user_ids), len(item_ids)))
     '''
 
-    return matrix
+    return matrix, le_visitors, le_items
 
 def train_test_split_temporal(events: pd.DataFrame,test_days: int = 7):
     # Split czasowy — ostatnie N dni idą do testu
@@ -78,6 +78,7 @@ if __name__ == "__main__":
     after_filter = clear_abnormal_activity(load_events())
     print(after_filter['event'].value_counts())
     print('---Wielkość macierzy')
-    print(create_matrix(after_filter).shape)
+    matrix, vEncoder, iEncoder = create_matrix(after_filter)
+    print(matrix.shape)
 
 
