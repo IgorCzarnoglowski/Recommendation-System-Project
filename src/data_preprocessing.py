@@ -57,12 +57,12 @@ def train_test_split_temporal(events: pd.DataFrame,test_days: int = 7):
     test  = events[events["timestamp"] >  cutoff]
 
     # Zostaw w teście tylko userów i produkty znane z treningu
-    train_users = set(train["user_id"])
-    train_items = set(train["product_id"])
+    train_users = set(train["visitorid"])
+    train_items = set(train["itemid"])
 
     test = test[
-        test["user_id"].isin(train_users) &
-        test["product_id"].isin(train_items)
+        test["visitorid"].isin(train_users) &
+        test["itemid"].isin(train_items)
     ]
 
     return train.reset_index(drop=True), test.reset_index(drop=True)
