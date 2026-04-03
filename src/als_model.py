@@ -11,7 +11,7 @@ MODELS_DIR.mkdir(exist_ok=True)
 @dataclass
 class RecommenderModel:
     model: AlternatingLeastSquares
-    le_visitors: LabelEncoder
+    le_viewers: LabelEncoder
     le_items: LabelEncoder
 
 def train_model(matrix: csr_matrix, factors = 100, iterations = 20,
@@ -23,20 +23,21 @@ def train_model(matrix: csr_matrix, factors = 100, iterations = 20,
         alpha=alpha,  # confidence scaling for implicit feedback
     )
 
-    als.fit(matrix.T.tocsr())
+    als.fit(matrix)
 
     return als
 
 def recommend(model: RecommenderModel, matrix: csr_matrix, viewer_id, n = 10) -> list:
 
+
     # Sprawdzenie, czy użytkownik istnieje w koderze
     # .classes_ daje tablice kluczy (id) które są unikalne i posortowane
-    if viewer_id not in model.le_visitors.classes_:
+    if viewer_id not in model.le_viewers.classes_:
         return []
 
-    user_idx = model.le_visitors.transform([viewer_id])[0]
+    user_idx = model.le_viewers.transform([viewer_id])[0]
 
-    item_indices, scores = model.recommend(
+    item_indices, scores = model.model.recommend(
         userid= user_idx,
         user_items= matrix[user_idx],
         N=n,
@@ -44,6 +45,7 @@ def recommend(model: RecommenderModel, matrix: csr_matrix, viewer_id, n = 10) ->
     )
 
     recommendations = model.le_items.inverse_transform(item_indices)
+
 
     return list(zip(recommendations, scores))
 

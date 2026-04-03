@@ -1,11 +1,11 @@
 import pandas as pd
-import os
+from pathlib import Path
 
-curr_path = os.path.dirname(__file__)
+DATA_DIR = Path(__file__).parent.parent / "data"
 
 def load_events():
     # Sposób na znalezienie pliku w innym folderze niż plik .py
-    df = pd.read_csv(os.path.relpath('..\\data\\events.csv', curr_path))
+    df = pd.read_csv(DATA_DIR / "events.csv")
 
     # Ponieważ kolumna timestamp jest w UNIX timestamp (milisekundach od 1 stycznia, 1970 roku)
     #Trzeba to zmienić na naszą date
@@ -24,8 +24,8 @@ def load_events():
 
 
 def load_item_properties():
-    part1 = pd.read_csv(os.path.relpath('..\\data\\item_properties_part1.csv', curr_path))
-    part2 = pd.read_csv(os.path.relpath('..\\data\\item_properties_part2.csv', curr_path))
+    part1 = pd.read_csv(DATA_DIR / "item_properties_part1.csv")
+    part2 = pd.read_csv(DATA_DIR / "item_properties_part2.csv")
 
     df = pd.concat([part1, part2], ignore_index = True)
     df["itemid"] = df["itemid"].astype(int)

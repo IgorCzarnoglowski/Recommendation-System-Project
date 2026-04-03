@@ -18,6 +18,8 @@ def clear_abnormal_activity(events: pd.DataFrame, min_user_interactions = 3, min
     return events
 
 def create_matrix(events: pd.DataFrame):
+
+    events = events.copy()
     # Laber encoder oddzielnie, aby nie tworzyć zbyt dużej macierzy
     le_visitors = LabelEncoder()
     le_items = LabelEncoder()
@@ -44,15 +46,14 @@ def create_matrix(events: pd.DataFrame):
     
     UI = csr_matrix((data, (rows, cols)), shape=(len(user_ids), len(item_ids)))
     '''
-
     return matrix, le_visitors, le_items
 
 def train_test_split_temporal(events: pd.DataFrame,test_days: int = 7):
     # Split czasowy — ostatnie N dni idą do testu
     # NIGDY nie rób random splitu w rec sys
-    cutoff = events["timestamp"].max() - pd.Timedelta(days=test_days)
-    train = events[events["timestamp"] <= cutoff]
-    test  = events[events["timestamp"] >  cutoff]
+    cutoff = events["time"].max() - pd.Timedelta(days=test_days)
+    train = events[events["time"] <= cutoff]
+    test  = events[events["time"] >  cutoff]
 
     # Zostaw w teście tylko userów i produkty znane z treningu
     train_users = set(train["visitorid"])
