@@ -49,3 +49,6 @@ def load_item_properties():
 
     return pivoted
 
+if __name__ == "__main__":
+    print(load_events().head())
+
