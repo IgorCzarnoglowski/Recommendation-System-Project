@@ -49,4 +49,13 @@ def recall_at_k(recommended: RecommenderModel, matrix:csr_matrix, test: pd.DataF
         hits = len(set(rec) & actual[vid])
         recalls.append(hits / len(actual[vid]))
 
+    return float(np.mean(recalls))
 
+
+def evaluate_model(recommended: RecommenderModel, matrix:csr_matrix, test: pd.DataFrame, k=10, n=1000) -> dict[
+    str, float]:
+
+    p = precision_at_k(recommended, matrix, test, k, n)
+    r = recall_at_k(recommended, matrix, test, k, n)
+
+    return {"precision": p, "recall": r}
