@@ -2,9 +2,7 @@ from scipy.sparse import csr_matrix
 import pandas as pd
 from sklearn.preprocessing import LabelEncoder
 
-def clear_abnormal_activity(events: pd.DataFrame):
-    min_user_interactions = 3
-    min_item_interactions = 5
+def clear_abnormal_activity(events: pd.DataFrame, min_user_interactions = 3, min_item_interactions = 5):
     # Itereujemy dwa razy, bo jak usuniemy np. raz jakieś produkty
     # To wtedy również zmniejszy się ilość klientów z interakcjami
     for _ in range(2):
