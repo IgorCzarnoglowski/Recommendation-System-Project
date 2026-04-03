@@ -43,6 +43,10 @@ We can clearly see that metrics are slightly better after removing abnormal acti
 
 ## What I learned
 
+I believe that key takeaways from this project is "power" of ctx matrix, ways to preprocess your data, the idea of recommendation systems and
+problems that awaits, such as cold start for new products or sparsity of data. Also, I learned more about ALS method and math behind it.
+I feel like, that I have some idea of how recommendation systems look like in big e-commerce shops.
+
 ## Dataset
 
 Download the RetailRocket dataset from Kaggle:
